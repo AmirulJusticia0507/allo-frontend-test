@@ -1,11 +1,11 @@
 /**
  * composables/useRocketList.ts
  *
- * Lifecycle glue for the rocket list screen: loads the data on mount,
- * cancels pending requests on unmount, and exposes client-side filtering.
+ * Lifecycle glue for the rocket list screen: loads the data on mount and
+ * exposes client-side filtering.
  */
 
-import { computed, onMounted, onUnmounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 
 import { useRocketStore } from '@/stores/rockets'
 
@@ -29,9 +29,9 @@ export function useRocketList () {
     if (store.listState.status === 'idle') void store.loadRockets()
   })
 
-  onUnmounted(() => {
-    store.cancelPendingRequests()
-  })
+  // The in-flight list request is intentionally not cancelled on unmount: the
+  // detail screen needs the cached rocket, and the store reuses the response
+  // when the user comes back to the list. Only explicit retries replace it.
 
   const search = ref('')
   const country = ref<string | null>(null)

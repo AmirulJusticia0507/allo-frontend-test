@@ -131,6 +131,7 @@
 
   const store = useRocketStore()
 
+  /** The dialog is fully controlled by `v-model` on the parent. */
   const isOpen = computed({
     get: () => props.modelValue,
     set: value => emit('update:modelValue', value),
