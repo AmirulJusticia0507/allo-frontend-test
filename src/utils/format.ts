@@ -65,7 +65,7 @@ export function truncate (value: string | null | undefined, maxLength = 160): st
  * exact `decimal.js` arithmetic, and `Intl` rounds to at most 2 decimals.
  * Never send a formatted value back to the API.
  */
-export function formatMoney (value: string | null | undefined, currency = 'IDR'): string {
+export function formatMoney (value: string | null | undefined, currency = 'USD'): string {
   if (value == null || value === '') return NOT_AVAILABLE
 
   const numeric = Number(value)
@@ -83,7 +83,7 @@ export function formatMoney (value: string | null | undefined, currency = 'IDR')
  * Formats a signed balance: `+66.67` / `-33.33` → `+$66.67` / `-$33.33`.
  * The sign is kept because it carries the meaning (owed vs. owes).
  */
-export function formatSignedMoney (value: string | null | undefined, currency = 'IDR'): string {
+export function formatSignedMoney (value: string | null | undefined, currency = 'USD'): string {
   if (value == null || value === '') return NOT_AVAILABLE
 
   const numeric = Number(value)

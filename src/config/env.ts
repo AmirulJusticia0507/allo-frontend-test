@@ -14,3 +14,13 @@
  */
 export const API_BASE_URL: string =
   import.meta.env.VITE_API_BASE_URL ?? '/launch-library'
+
+/**
+ * Base URL of the Split Bill API.
+ *
+ * Defaults to the same-origin path `/api`, which the Vite dev server proxies to
+ * `VITE_SPLIT_BILL_TARGET` (see `vite.config.mts`). Keeping it relative means no
+ * CORS in development and no hardcoded localhost in the bundle.
+ */
+export const SPLIT_BILL_BASE_URL: string =
+  import.meta.env.VITE_SPLIT_BILL_BASE_URL ?? '/api'

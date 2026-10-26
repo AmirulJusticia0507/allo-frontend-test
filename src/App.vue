@@ -14,17 +14,26 @@
             color="primary"
             icon="mdi-rocket-launch"
           />
-          <span class="text-subtitle-1 font-weight-bold">Allo Space</span>
+          <span class="text-subtitle-1 font-weight-bold">{{ isSplitBillRoute ? 'Allo Split' : 'Allo Space' }}</span>
         </router-link>
       </v-app-bar-title>
 
       <template #append>
         <v-btn
           class="mr-2 text-none"
+          :prepend-icon="isSplitBillRoute ? 'mdi-rocket-launch-outline' : 'mdi-account-cash-outline'"
+          variant="text"
+          :to="isSplitBillRoute ? '/' : '/split-bill'"
+        >
+          {{ isSplitBillRoute ? 'Rockets' : 'Split Bill' }}
+        </v-btn>
+        <v-btn
+          v-if="!isSplitBillRoute"
+          class="mr-2 text-none"
           color="primary"
           prepend-icon="mdi-plus"
           variant="flat"
-          @click="emit('add')"
+          @click="isAddDialogOpen = true"
         >
           Add rocket
         </v-btn>
@@ -39,7 +48,9 @@
       class="justify-center text-caption text-medium-emphasis"
       color="surface"
     >
-      Rocket data from the Launch Library 2 API by The Space Devs
+      {{ isSplitBillRoute
+        ? 'Split Bill API · settlement calculated with exact decimal arithmetic'
+        : 'Rocket data from the Launch Library 2 API by The Space Devs' }}
     </v-footer>
 
     <!-- App-level dialogs, kept mounted so they survive route changes. -->
@@ -59,16 +70,16 @@
 </template>
 
 <script lang="ts" setup>
-  import { ref } from 'vue'
-  import { useRouter } from 'vue-router'
+  import { computed, ref } from 'vue'
+  import { useRoute, useRouter } from 'vue-router'
 
   import AddRocketDialog from '@/components/AddRocketDialog.vue'
 
-  const emit = defineEmits<{
-    add: []
-  }>()
-
   const router = useRouter()
+  const route = useRoute()
+
+  /** The split bill screens live under `/split-bill`; everything else is rockets. */
+  const isSplitBillRoute = computed(() => route.path.startsWith('/split-bill'))
 
   const isAddDialogOpen = ref(false)
   const snackbar = ref(false)

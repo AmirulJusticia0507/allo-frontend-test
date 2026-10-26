@@ -13,11 +13,15 @@ import { fileURLToPath, URL } from 'node:url'
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), '')
 
-  // The Split Bill API runs as a separate service (default port 4110).
-  // Proxying `/api` keeps the app same-origin in development: no CORS, and no
+  // Proxying `/api` keeps Split Bill same-origin in development: no CORS, and no
   // hardcoded backend URL in the browser bundle. Override the target with
   // `VITE_SPLIT_BILL_TARGET` in `.env.local`.
   const splitBillTarget = env.VITE_SPLIT_BILL_TARGET || 'http://localhost:4110'
+
+  // Optional proxy for Launch Library 2 (`VITE_API_PROXY_TARGET`). Some browser
+  // builds cancel cross-origin requests to it with `net::ERR_ABORTED`, which
+  // leaves the app stuck on loading. Enabling the proxy bypasses CORS entirely.
+  const launchLibraryTarget = env.VITE_API_PROXY_TARGET || 'https://lldev.thespacedevs.com'
 
   return {
     plugins: [
@@ -69,6 +73,15 @@ export default defineConfig(({ mode }) => {
           target: splitBillTarget,
           changeOrigin: true,
         },
+        ...(launchLibraryTarget
+          ? {
+              '/launch-library': {
+                target: launchLibraryTarget,
+                changeOrigin: true,
+                rewrite: (path: string) => path.replace(/^\/launch-library/, '/2.2.0'),
+              },
+            }
+          : {}),
       },
     },
     css: {
