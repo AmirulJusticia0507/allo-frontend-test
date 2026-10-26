@@ -7,8 +7,12 @@
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.app.tsbuildinfo",
 
     "baseUrl": ".",
+    "lib": ["ES2023", "DOM", "DOM.Iterable"],
+    "target": "ES2022",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["./src/*"],
+      "vue-router/auto": ["./src/types/vue-router-auto.d.ts"],
+      "vue-router/auto-routes": ["./src/types/vue-router-auto.d.ts"]
     }
   }
 }
